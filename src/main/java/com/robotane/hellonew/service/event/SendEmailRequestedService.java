@@ -1,4 +1,4 @@
-package com.robotane.hellonew.service;
+package com.robotane.hellonew.service.event;
 
 import com.robotane.hellonew.endpoint.event.model.SendEmailRequested;
 import com.robotane.hellonew.mail.Email;
