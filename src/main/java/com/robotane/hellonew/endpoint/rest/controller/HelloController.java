@@ -1,8 +1,7 @@
 package com.robotane.hellonew.endpoint.rest.controller;
 
-import com.robotane.hellonew.mail.Email;
-import com.robotane.hellonew.mail.Mailer;
-import jakarta.mail.internet.InternetAddress;
+import com.robotane.hellonew.endpoint.event.EventProducer;
+import com.robotane.hellonew.endpoint.event.model.SendEmailRequested;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -13,15 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 public class HelloController {
-  private final Mailer mailer;
+  private final EventProducer<SendEmailRequested> eventProducer;
 
   @GetMapping("/hello")
   @SneakyThrows
   public String helloWorld(@RequestParam String to) {
-    var email =
-        new Email(new InternetAddress(to), List.of(), List.of(), "Hello world", "Hello Again !", List.of());
-
-    mailer.accept(email);
-    return "Hello Angain !";
+    var event = SendEmailRequested.builder().to(to).build();
+    eventProducer.accept(List.of(event));
+    return "Hello Again !";
   }
 }
